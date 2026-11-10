@@ -38,7 +38,7 @@ interface, GIF preparation, playlists, per-file speed and fit controls, rotation
 shuffle, saved settings, startup integration and reconnection scheduling.
 These features are built around the driver and libraries credited here.
 The original player code, project documentation and RGB test animation are
-offered under the PolyForm Noncommercial License 1.0.0 in the root `LICENSE`.
+offered under the MIT License in the root `LICENSE`.
 The project copyright notice is in `NOTICE`. This license applies to the
 original project files; third-party components and retained notices keep
 their own licenses. It does not resolve the earlier-source provenance question.

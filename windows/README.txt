@@ -23,4 +23,4 @@ Game-themed artwork from the personal setup is not included.
 
 Attribution and original third-party notices are in ATTRIBUTION.md and
 LICENSES/ at the repository root. The original player code is offered under
-the PolyForm Noncommercial License 1.0.0. See the root LICENSE and NOTICE.
+the MIT License. See the root LICENSE and NOTICE.

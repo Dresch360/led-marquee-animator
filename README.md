@@ -62,7 +62,7 @@ See [validation notes](docs/VALIDATION.md) for the distinction between automated
 
 See [ATTRIBUTION.md](ATTRIBUTION.md) for credits to Greg Tatham / UpDryTwist, CrimsonClyde's earlier protocol work and the runtime libraries. Original third-party notices are retained under [LICENSES/](LICENSES/), with sources and checksums in [LICENSE_SOURCES.json](LICENSE_SOURCES.json).
 
-The original player code, project documentation and RGB test animation are **source available under the [PolyForm Noncommercial License 1.0.0](LICENSE)**. See [NOTICE](NOTICE) for the project copyright notice. Personal hobby use, modification and sharing for purposes permitted by that license are allowed. Commercial uses outside its permitted purposes require separate permission from the project owner.
+The original player code, project documentation and RGB test animation are **open source under the [MIT License](LICENSE)**. See [NOTICE](NOTICE) for the project copyright notice. Commercial use, modification and redistribution are permitted, provided the copyright and license notices are retained as required by the license.
 
 Third-party components retain their original licenses. This project license does not replace those terms or resolve the earlier-source provenance question recorded in ATTRIBUTION.md. Windows binary notice collection also remains a release preparation item.
 
