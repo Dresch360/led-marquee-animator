@@ -1,0 +1,100 @@
+[
+  {
+    "component": "Flask",
+    "version": "3.1.2",
+    "source": "https://pypi.org/project/Flask/3.1.2/",
+    "file": "LICENSES/Flask-3.1.2/flask-3.1.2.dist-info/licenses/LICENSE.txt",
+    "sha256": "489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea"
+  },
+  {
+    "component": "Jinja2",
+    "version": "3.1.6",
+    "source": "https://pypi.org/project/Jinja2/3.1.6/",
+    "file": "LICENSES/Jinja2-3.1.6/jinja2-3.1.6.dist-info/licenses/LICENSE.txt",
+    "sha256": "3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b"
+  },
+  {
+    "component": "MarkupSafe",
+    "version": "3.0.4",
+    "source": "https://pypi.org/project/MarkupSafe/3.0.4/",
+    "file": "LICENSES/MarkupSafe-3.0.4/markupsafe-3.0.4.dist-info/licenses/LICENSE.txt",
+    "sha256": "489a8e1108509ed98a37bb983e11e0f7e1d31f0bd8f99a79c8448e7ff37d07ea"
+  },
+  {
+    "component": "Pillow",
+    "version": "11.3.0",
+    "source": "https://pypi.org/project/Pillow/11.3.0/",
+    "file": "LICENSES/Pillow-11.3.0/LICENSE-from-Linux-aarch64-wheel.txt",
+    "sha256": "2c40a7d8894126ff7a993a752505b915694aafe7a620889ef368acbf54b87144"
+  },
+  {
+    "component": "Werkzeug",
+    "version": "3.1.9",
+    "source": "https://pypi.org/project/Werkzeug/3.1.9/",
+    "file": "LICENSES/Werkzeug-3.1.9/werkzeug/debug/shared/ICON_LICENSE.md",
+    "sha256": "0e103a6358149792707e0d0d14df518f8556213b7cb54c7422f7467f4bb1f7eb"
+  },
+  {
+    "component": "Werkzeug",
+    "version": "3.1.9",
+    "source": "https://pypi.org/project/Werkzeug/3.1.9/",
+    "file": "LICENSES/Werkzeug-3.1.9/werkzeug-3.1.9.dist-info/licenses/LICENSE.txt",
+    "sha256": "3b49dcee4105eb37bac10faf1be260408fe85d252b8e9df2e0979fc1e094437b"
+  },
+  {
+    "component": "bleak",
+    "version": "1.1.1",
+    "source": "https://pypi.org/project/bleak/1.1.1/",
+    "file": "LICENSES/bleak-1.1.1/bleak-1.1.1.dist-info/LICENSE",
+    "sha256": "c4029a2b63b3824ab68be841f414addbdde20cb79cdbe272fa80c0b2abe65374"
+  },
+  {
+    "component": "blinker",
+    "version": "1.9.0",
+    "source": "https://pypi.org/project/blinker/1.9.0/",
+    "file": "LICENSES/blinker-1.9.0/blinker-1.9.0.dist-info/LICENSE.txt",
+    "sha256": "9eb73a1f38597a4aa17025d2ae1be3839624c795e985d4f0e9769ce29faca467"
+  },
+  {
+    "component": "click",
+    "version": "8.5.1",
+    "source": "https://pypi.org/project/click/8.5.1/",
+    "file": "LICENSES/click-8.5.1/click-8.5.1.dist-info/licenses/LICENSE.txt",
+    "sha256": "9a8ad106a394e853bfe21f42f4e72d592819a22805d991b5f3275029292b658d"
+  },
+  {
+    "component": "coolledx-driver",
+    "version": "abf781b671b7a89571711127be0094b308e7f722",
+    "source": "https://github.com/UpDryTwist/coolledx-driver/blob/abf781b671b7a89571711127be0094b308e7f722/LICENSE",
+    "file": "LICENSES/coolledx-driver/abf781b671b7a89571711127be0094b308e7f722/LICENSE",
+    "sha256": "8419122fdfbeab6a4c48f6dabc73b2ff4872600bdfdcce0ca541b3e8bfeba970"
+  },
+  {
+    "component": "dbus-fast",
+    "version": "5.2.0",
+    "source": "https://pypi.org/project/dbus-fast/5.2.0/",
+    "file": "LICENSES/dbus-fast-5.2.0/dbus_fast-5.2.0.dist-info/licenses/LICENSE",
+    "sha256": "c37e9c75110e01d1f0c5360dc7d7776a30ac5f70d2440db214423e4b7a77a6af"
+  },
+  {
+    "component": "itsdangerous",
+    "version": "2.2.0",
+    "source": "https://pypi.org/project/itsdangerous/2.2.0/",
+    "file": "LICENSES/itsdangerous-2.2.0/itsdangerous-2.2.0.dist-info/LICENSE.txt",
+    "sha256": "63af09891b6be8ad1a4252ed43af0f4efba7fc948e228367bed7f3c5ae0b09d7"
+  },
+  {
+    "component": "waitress",
+    "version": "3.0.2",
+    "source": "https://pypi.org/project/waitress/3.0.2/",
+    "file": "LICENSES/waitress-3.0.2/EMBEDDED_SOURCE_NOTICES.txt",
+    "sha256": "ec16b1469fe31372a59927b04a2094d87663c54f928c82170d2c812655c1d188"
+  },
+  {
+    "component": "waitress",
+    "version": "3.0.2",
+    "source": "https://pypi.org/project/waitress/3.0.2/",
+    "file": "LICENSES/waitress-3.0.2/waitress-3.0.2.dist-info/LICENSE.txt",
+    "sha256": "3e671db11df687516cc1db5b3d65e4aa383eaca3c20cea3faf53a0f7335d0a3c"
+  }
+]

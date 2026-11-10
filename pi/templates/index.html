@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="csrf-token" content="{{ token }}">
+  <title>CoolLED Player</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+<main>
+  <header><div><p class="eyebrow">ARCADE DISPLAY</p><h1>CoolLED Player<span class="dot">.</span></h1></div><div id="badge" class="badge">Connecting</div></header>
+  <section class="panel status-panel">
+    <div class="status-head"><div><p class="label">DISPLAY STATUS</p><h2 id="phase">Loading player…</h2><p id="current" class="muted">Connecting to your Pi</p></div><div class="timer"><span id="remaining">—</span><small id="timer-label">NEXT ANIMATION</small></div></div>
+    <div id="error" class="error" role="alert" hidden></div>
+    <div class="actions"><button id="start" class="primary" disabled>Start rotation</button><button id="stop" class="stop" disabled>Stop</button><label class="shuffle"><input id="shuffle" type="checkbox" disabled> Shuffle rotation</label><label class="interval">Rotate every <input id="minutes" type="number" min="0.01" max="1440" step="any" value="5" aria-label="Rotation interval in minutes"> minutes</label></div>
+    <p class="hint">Shuffle plays each selected animation once per round. Closing this page keeps rotation running. When left running, rotation also resumes after the Pi restarts.</p>
+  </section>
+  <section class="panel preview-panel"><div class="section-title"><h2 id="preview-name">Animation preview</h2><span id="preview-meta" class="muted"></span></div><div class="matrix"><img id="preview" alt="Selected animation" hidden></div><p class="hint">Last sent: <span id="last-sent">Nothing sent yet</span></p></section>
+  <section class="panel"><div class="section-title"><div><h2>Animation playlist</h2><p class="muted">Check files to include. Use the arrows to set their order.</p></div><span id="count" class="badge">0 files</span></div><div class="toolbar"><button id="save" disabled>Save playlist</button><button id="add" disabled>Add GIFs</button><button id="rescan" disabled>Rescan folder</button><input id="file-input" type="file" accept=".gif,image/gif" multiple hidden><span id="dirty" class="muted"></span></div><div id="files" class="files"></div><p class="hint">The interval starts after each upload finishes. Stop rotation to edit the playlist. Existing files are kept on the Pi.</p></section>
+  <details class="panel"><summary>Activity</summary><pre id="log" aria-label="Player activity"></pre></details>
+  <footer>96 × 16 matrix · Individual animation uploads · <span id="connection">Connecting</span></footer>
+</main><div id="toast" role="status" hidden></div>
+</body></html>
