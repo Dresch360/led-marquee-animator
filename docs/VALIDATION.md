@@ -7,11 +7,15 @@
 - The user confirmed the original Pi page and playback worked and later reported that the shuffle update worked.
 - Full combined reels did not produce acceptable playback. A 64-frame diagnostic also failed to display correctly despite a sender success message.
 
-This repository import changes organization and documentation, not application behavior. It does not modify the installed PC or Pi applications.
+The initial source import preserved application behavior. The subsequent setup work adds user-selected addresses, configurable installation directories and generated startup services. These repository changes have not been installed on the user's running PC or Pi.
 
 ## Automated coverage
 
-The Pi suite contains 25 tests covering GIF fit and frame preservation, including identical frames; playlist validation; ordered and shuffled rounds; no immediate boundary repeats; retrying the same pending item; the interval starting after upload completion; stopping and cancellation; saved running/stopped state; file validation and upload protection; CSRF tokens; child-process exit and success-marker handling; and the upload watchdog.
+The Pi suite contains 27 tests covering GIF fit and frame preservation, including identical frames; playlist validation; ordered and shuffled rounds; no immediate boundary repeats; retrying the same pending item; the interval starting after upload completion; stopping and cancellation; saved running/stopped state; file validation and upload protection; CSRF tokens; child-process exit and success-marker handling; the upload watchdog; use of the configured display address; and rejection of a missing address without a Bluetooth attempt.
+
+The installer suite contains 12 tests covering address selection, cloning and patching a local fixture driver, repeat setup, Windows Git line endings, refusal to overwrite unexpected driver edits, settings and animation preservation, application backup and rollback on a simulated rename failure, generated service paths and a Linux setup flow with downloads, dependency installation and privileged operations simulated. Three Windows configuration tests cover custom paths, retained settings and the absence of a personal default display address.
+
+The actual pinned upstream driver was also cloned from the local audit mirror, patched and checked by importing its command-line tool and running `--help`. Generated systemd units passed `systemd-analyze verify` using fixture executables and a stub Bluetooth unit, including an installation path with spaces, percent signs and a dollar sign. These checks did not start services or communicate with Bluetooth.
 
 These tests simulate the driver and Bluetooth results. They cannot prove physical playback or controller capacity.
 

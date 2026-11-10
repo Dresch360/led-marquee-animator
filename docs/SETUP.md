@@ -1,72 +1,127 @@
-# Setup notes for the imported applications
+# Install from source
 
-These applications currently depend on the working driver/environment arrangement from the personal prototype. This document records those prerequisites; a general installation wizard is not yet available. Do not run an installer against a working player just to view this repository.
+The installers are new and still need fresh-install checks on real Windows and Pi hardware. The existing personal setup has played animations successfully; that does not verify every new installation path. The repository is currently private, so downloading it requires an account with access.
 
-## Shared requirements
+## Requirements
 
-- A Bluetooth adapter supporting BLE and a compatible powered sign within range.
-- Python, Bleak 1.1.1 and Pillow 11.3.0. Python 3.13 was used in the personal setup.
-- A separately obtained copy of [coolledx-driver](https://github.com/UpDryTwist/coolledx-driver), pinned to `abf781b671b7a89571711127be0094b308e7f722`.
-- In that driver's `src/coolledx/client.py`, the GATT write argument `response=expect_response,` was changed to `response=False,` for the tested characteristic. Retain a backup and check that the expected source is present before modifying it.
-- The correct Bluetooth address for your sign. The imported defaults still refer to the original test sign.
+- A compatible Bluetooth BLE sign, a BLE adapter and a Windows or Linux host.
+- Python 3.11, 3.12 or 3.13 with venv and pip. The Windows double-click installer uses Python 3.13 specifically.
+- Git available on PATH.
+- Internet access during setup to download the pinned driver and Python dependencies.
+- A 96 × 16 sign for the current fixed canvas. Other controllers and sizes are not verified.
 
-Do not substitute the driver's latest branch without testing. The working revision was deliberately pinned. The earlier protocol provenance follow-up is recorded in the root attribution file.
+The installer asks you to select your display from a scan, enter its Bluetooth address or reuse a saved address. It does not upload an animation. A successful installation still needs a physical playback check.
 
-## Windows desktop
+## Windows
 
-The launcher currently looks for this Python environment:
+Install Python 3.13 with its launcher and Tcl/Tk components using the [official Python instructions](https://docs.python.org/3.13/using/windows.html). Install [Git for Windows](https://gitforwindows.org/) if Git is not already available. Open a new terminal after installing Git.
 
-```text
-%USERPROFILE%\CoolLED\coolledx-driver-main\.venv\Scripts\pythonw.exe
-```
-
-The corresponding console Python must import `tkinter` and `PIL.ImageTk` successfully. The default driver directory is:
+Download and extract the entire repository, then double-click:
 
 ```text
-%USERPROFILE%\CoolLED\September\coolledx-driver-abf781b671b7a89571711127be0094b308e7f722
+windows\Install_CoolLED.cmd
 ```
 
-1. Keep the verified environment and patched driver in place.
-2. Open `windows\Start_CoolLED.cmd`.
-3. In Setup, check the Bluetooth address, driver folder and Python executable.
-4. Add GIFs, choose their order, speed and fit, then use Send selected or Start rotation.
+Keep the top-level `setup_player.py`, `tools`, `pi`, `windows` and license files together. Copying only the Windows folder is not sufficient.
 
-Settings are saved in `%USERPROFILE%\CoolLED\uploader_settings.json`. The PC must stay awake and the app must remain running. X minimizes; Exit stops the application. No Windows startup entry is installed.
+Alternatively, in PowerShell, clone the repository into your user folder:
 
-Use normal individual rotation. The imported combined-reel feature is experimental and caused unacceptable frame loss in the personal setup.
+```powershell
+git clone https://github.com/Dresch360/arcade-led-player.git "$env:USERPROFILE\arcade-led-player"
+```
 
-## Dedicated Raspberry Pi
+Then run:
 
-The tested host was a Pi 3 running 64-bit Raspberry Pi OS / Debian 13 with Python 3.13.5. The installer requires the account `pi`, sudo access, systemd, BlueZ, `bluetoothctl` and `rfkill`.
+```powershell
+py -3.13 "$env:USERPROFILE\arcade-led-player\setup_player.py"
+```
 
-The existing directory layout is:
+The default installation directory is `%USERPROFILE%\CoolLED`. When setup finishes, open:
 
 ```text
-/home/pi/CoolLED/.venv
-/home/pi/CoolLED/driver
-/home/pi/CoolLED/animations
+%USERPROFILE%\CoolLED\Start_CoolLED.cmd
 ```
 
-The Python environment must already exist and the driver must be at the pinned revision with its write patch. Bluetooth must be unblocked and powered on. Copy any existing GIFs into the animations directory.
+Add GIFs, set their order, speed and fit, then use Send selected or Start rotation. The PC must stay awake and the application must remain running. X minimizes it; Exit quits. No Windows startup entry is installed.
 
-After reviewing those prerequisites, from this repository run as `pi`, without prefixing the whole command with sudo:
+The imported combined-reel option is still experimental and caused unacceptable frame loss in the personal setup. Use individual rotation.
+
+For a separate test installation, provide a new directory and your actual display address. The address below is an example that you must replace:
+
+```powershell
+py -3.13 "$env:USERPROFILE\arcade-led-player\setup_player.py" --root "$env:USERPROFILE\CoolLED_Test" --address "AA:BB:CC:DD:EE:FF"
+```
+
+The installed launcher detects its own installation folder. When running the source application directly with a custom data folder, set `COOLLED_ROOT` to that folder first.
+
+Python 3.11 or 3.12 users can invoke `setup_player.py` explicitly with their installed Python version instead of the double-click installer.
+
+## Raspberry Pi / Linux
+
+Use your normal account. It does not have to be named `pi`. Do not run the entire installer with sudo.
+
+On Raspberry Pi OS or Debian, run each command separately:
 
 ```bash
-bash pi/install.sh
+sudo apt update
 ```
 
-The installer installs `pi/requirements.txt` into the existing environment, requests sudo for service setup and installs:
+```bash
+sudo apt install -y git python3-venv bluez rfkill
+```
 
-- `coolled-player.service`, running as `pi`
+```bash
+git clone https://github.com/Dresch360/arcade-led-player.git "$HOME/arcade-led-player"
+```
+
+```bash
+python3 "$HOME/arcade-led-player/setup_player.py"
+```
+
+The default installation directory is `$HOME/CoolLED`. After downloading dependencies, setup scans for your display unless you provided `--address` or have a saved address. It then requests sudo to install these systemd services:
+
+- `coolled-player.service`, running as your normal account
 - `coolled-bluetooth.service`, enabling the Bluetooth radio
 
-It preserves existing animations and settings. On the first update it also keeps `Player.before-shuffle` and `pi_player_settings.before-shuffle.json` if those originals exist.
+Open `http://<your-linux-host-ip>:8080` from a browser on the same trusted home network. Use your actual host IP. The page has no login; do not expose or forward its port to the internet.
 
-Open `http://<your-pi-ip>:8080` from a browser on the same home network. The hostname printed by the prototype installer is a legacy default; use your actual Pi IP or hostname. Stop rotation before uploading GIFs or editing settings, then start it again.
+Stop rotation before adding GIFs or changing settings, then start it again. Closing the browser or shutting down the browsing PC does not stop the Pi. Leaving rotation running allows it to resume after a service restart; Stop saves the stopped state.
 
-The installed program is `/home/pi/CoolLED/Player`. Settings are `/home/pi/CoolLED/pi_player_settings.json`. There is no login on the web page; keep it on a trusted LAN.
+To choose a different installation directory, use `--root "/absolute/path/to/CoolLED"`. To install without systemd startup:
 
-Useful service commands, run separately on the Pi:
+```bash
+python3 "$HOME/arcade-led-player/setup_player.py" --no-service
+```
+
+Setup prints a correctly quoted foreground launch command for that directory. In foreground mode, the process must stay running. There is only one systemd player instance per host; installing with services into a different directory repoints that instance to the new directory.
+
+The tested personal host was a Pi 3 with 64-bit Raspberry Pi OS / Debian 13 and Python 3.13.5. Other Linux distributions may need different package names and Bluetooth permissions.
+
+## Files and updates
+
+Within your chosen installation directory:
+
+| Path | Purpose |
+| --- | --- |
+| `.venv/` | Python environment |
+| `driver/` | Pinned Bluetooth driver |
+| `Player/` | Installed application and license notices |
+| `animations/` | GIF files; includes the RGB test demo |
+| `hardware.json` | Selected Bluetooth address |
+| `uploader_settings.json` | Windows playlist and settings |
+| `pi_player_settings.json` | Pi playlist, shuffle and running/stopped state |
+
+Rerun the installer from an updated source checkout to update that installation. Close the Windows uploader first. The Linux service is stopped before the application files are replaced and restarted after service setup succeeds.
+
+Existing animations are not overwritten. Pi playlist settings are preserved byte for byte. Windows playlist entries, speeds, fit and interval are retained while the configured driver, Python path and Bluetooth address are updated.
+
+The previous application is kept in a timestamped `Player.before-*` directory. Hardware and Windows settings files are also backed up before replacement. These backups do not constitute a full environment rollback: dependencies and service configuration may also change. A failed setup reports its error; check it before restarting or retrying.
+
+The installer uses driver revision `abf781b671b7a89571711127be0094b308e7f722`. It applies only the known `response=False` Bluetooth write patch and accepts Windows Git line-ending conversion. A different revision or other changes to the driver's client file cause setup to stop without overwriting that file. Existing extra edits elsewhere in the driver are left in place.
+
+## Service controls
+
+Run each command separately:
 
 ```bash
 sudo systemctl status coolled-player.service --no-pager
@@ -80,10 +135,28 @@ sudo journalctl -u coolled-player.service -n 60 --no-pager
 sudo systemctl restart coolled-player.service
 ```
 
-To disable background startup and stop the services:
+To stop background playback and disable startup:
 
 ```bash
 sudo systemctl disable --now coolled-player.service coolled-bluetooth.service
 ```
 
-Other Linux accounts, file layouts and distribution configurations need installer adaptation. This source import does not establish compatibility with every Linux system.
+## Tests
+
+Use a development environment with the Pi requirements installed for Linux tests:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+```bash
+python3 -m unittest discover -s pi/tests -v
+```
+
+The Windows configuration tests require Tkinter and Pillow but do not open a window:
+
+```text
+python -m unittest discover -s windows/tests -v
+```
+
+See [validation notes](VALIDATION.md) for what has and has not been tested physically.

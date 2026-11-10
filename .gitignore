@@ -11,6 +11,9 @@ venv/
 *.bak
 uploader_settings.json
 pi_player_settings.json
+hardware.json
+*.before-*
+Player.before-*/
 driver/
 build/
 dist/

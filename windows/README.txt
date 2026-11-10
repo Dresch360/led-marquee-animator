@@ -1,26 +1,32 @@
 ARCADE LED PLAYER: WINDOWS DESKTOP
 
-Source import of the Windows desktop player. See ../README.md and
-../docs/SETUP.md for setup assumptions and limitations.
+Extract or clone the entire repository. Install Python 3.13 with the Python
+launcher and Tkinter, plus Git for Windows. Then double-click:
+  windows\Install_CoolLED.cmd
 
-Start_CoolLED.cmd requires the existing Python environment in:
-  %USERPROFILE%\CoolLED\coolledx-driver-main\.venv
-It also requires the pinned September driver with the Bluetooth write patch.
-Check your Bluetooth address, Python path and driver path in Setup.
+Keep setup_player.py, tools, both platform folders and the license files
+together. The installer needs the complete source checkout.
 
-Double-click Start_CoolLED.cmd. Add GIFs, set per-file speed and fit, choose
-the rotation interval and click Start rotation. The PC must stay awake and
-the application must remain running. X minimizes it; Exit quits.
-No Windows startup entry is installed.
+Setup creates the environment and pinned driver, then lets you select a
+display or supply its Bluetooth address. It installs into:
+  %USERPROFILE%\CoolLED
+Setup does not upload an animation. Start the installed app using:
+  %USERPROFILE%\CoolLED\Start_CoolLED.cmd
 
-Use normal individual rotation. The imported combined-reel option is
+Add GIFs, choose speed and fit, set the interval and click Start rotation.
+The PC must stay awake and the application must remain running.
+X minimizes it; Exit quits. No Windows startup entry is installed.
+
+Use normal individual rotation. The imported combined-reel option remains
 experimental and caused unacceptable frame loss in the personal setup.
 
-Settings: %USERPROFILE%\CoolLED\uploader_settings.json
+For custom paths or Python 3.11/3.12, invoke setup_player.py directly.
+Use --root for the installation directory. The installed launcher detects
+its own directory. Existing playlist entries are preserved on updates.
 
+See docs/SETUP.md and docs/VALIDATION.md in the source repository.
 The bundled RGB test is the only sample animation in this import.
 Game-themed artwork from the personal setup is not included.
 
-Attribution and original third-party notices are in ATTRIBUTION.md and
-LICENSES/ at the repository root. The original player code is offered under
-the MIT License. See the root LICENSE and NOTICE.
+The root LICENSE and NOTICE offer original project files under MIT.
+Third-party licenses and attribution are retained alongside this file.

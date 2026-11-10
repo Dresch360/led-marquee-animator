@@ -36,6 +36,12 @@ SUCCESS_MARKER = 'LED sign update completed successfully'
 BACKGROUND_HINT = 'X minimizes to the taskbar. Exit quits. Keep the PC awake during rotation.'
 
 
+def data_root(home: Path | None = None):
+    if home is not None:
+        return home / 'CoolLED'
+    return Path(os.environ.get('COOLLED_ROOT', str(Path.home() / 'CoolLED'))).expanduser().resolve()
+
+
 @dataclass
 class Item:
     path: str
@@ -53,15 +59,21 @@ class Settings:
 
     @classmethod
     def defaults(cls, home: Path | None = None):
-        root = (home or Path.home()) / 'CoolLED'
-        samples = [root / 'Pitfall_Jungle_Swing.gif', root / 'CoolLED_RGB_Test.gif']
+        root = data_root(home)
+        samples = sorted((root / 'animations').glob('*.gif'))
         bundled = Path(__file__).resolve().parent / 'animations'
         items = [Item(str(p)) for p in samples if p.is_file()]
         if not items:
             items = [Item(str(p)) for p in sorted(bundled.glob('*.gif'))]
-        return cls('FF:FF:00:00:9E:3F',
-                   str(root / 'September' / ('coolledx-driver-' + REVISION)),
-                   str(root / 'coolledx-driver-main' / '.venv' / 'Scripts' / 'python.exe'),
+        panel_address = ''
+        try:
+            data = json.loads((root / 'hardware.json').read_text(encoding='utf-8-sig'))
+            if isinstance(data, dict) and isinstance(data.get('address'), str):
+                panel_address = data['address']
+        except (OSError, ValueError):
+            pass
+        return cls(panel_address, str(root / 'driver'),
+                   str(root / '.venv' / 'Scripts' / 'python.exe'),
                    items=items)
 
 
@@ -112,11 +124,11 @@ def validate_setup(settings: Settings):
     repo = Path(settings.driver)
     for relative in ('utils/tweak_sign.py', 'src/coolledx/client.py', 'src/coolledx/commands.py'):
         if not (repo / relative).is_file():
-            raise ValueError('The driver folder was not found. Select the verified September folder in Setup.')
+            raise ValueError('The driver folder was not found. Select the driver folder created by the installer in Setup.')
     commands = (repo / 'src/coolledx/commands.py').read_text(encoding='utf-8-sig')
     client = (repo / 'src/coolledx/client.py').read_text(encoding='utf-8-sig')
     if 'def create_command(' not in commands or not re.search(r'response\s*=\s*False', client):
-        raise ValueError('Select the verified September driver with the Bluetooth write fix in Setup.')
+        raise ValueError('Select the pinned driver with the Bluetooth write fix created by the installer.')
 
 
 def read_animation(path: Path, fit: str):
@@ -337,7 +349,7 @@ class Rotation:
 class Uploader:
     def __init__(self, root, config_path=None):
         self.root = root
-        self.config_path = config_path or Path.home() / 'CoolLED' / 'uploader_settings.json'
+        self.config_path = config_path or data_root() / 'uploader_settings.json'
         self.settings, warning = load_settings(self.config_path)
         self.events = queue.Queue()
         self.rotation = Rotation()
@@ -538,7 +550,7 @@ class Uploader:
     def add_files(self):
         if self.job or self.rotation.running:
             return
-        paths = filedialog.askopenfilenames(title='Add animations', initialdir=Path.home() / 'CoolLED', filetypes=[('Animated GIFs', '*.gif')])
+        paths = filedialog.askopenfilenames(title='Add animations', initialdir=data_root() / 'animations', filetypes=[('Animated GIFs', '*.gif')])
         existing = {os.path.normcase(str(Path(item.path).resolve())) for item in self.settings.items}
         first = len(self.settings.items)
         for path in paths:
@@ -865,7 +877,7 @@ class Uploader:
                     if selected:
                         values[key].set(selected)
                 ttk.Button(body, text='Browse…', command=browse).grid(row=row * 2 + 1, column=1, padx=(8, 0))
-        ttk.Label(body, text='These defaults match the setup already tested with your panel.', font=('Segoe UI', 9)).grid(row=6, column=0, sticky='w', pady=12)
+        ttk.Label(body, text='Use your display address and the driver/environment created by the installer.', font=('Segoe UI', 9)).grid(row=6, column=0, sticky='w', pady=12)
         def save():
             candidate = Settings(values['address'].get().strip(), values['driver'].get().strip(), values['python'].get().strip(), self.settings.minutes, self.settings.items)
             try:
@@ -901,7 +913,7 @@ def main():
         pass
     root = tk.Tk()
     def report_error(error_type, error, tb):
-        error_path = Path.home() / 'CoolLED' / 'uploader_error.log'
+        error_path = data_root() / 'uploader_error.log'
         try:
             error_path.parent.mkdir(parents=True, exist_ok=True)
             error_path.write_text(''.join(traceback.format_exception(error_type, error, tb)), encoding='utf-8')
@@ -919,7 +931,7 @@ if __name__ == '__main__':
         main()
     except Exception:
         details = traceback.format_exc()
-        error_path = Path.home() / 'CoolLED' / 'uploader_error.log'
+        error_path = data_root() / 'uploader_error.log'
         try:
             error_path.parent.mkdir(parents=True, exist_ok=True)
             error_path.write_text(details, encoding='utf-8')

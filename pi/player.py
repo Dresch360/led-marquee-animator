@@ -25,13 +25,23 @@ from PIL import Image, ImageOps, GifImagePlugin
 from werkzeug.exceptions import HTTPException
 from werkzeug.utils import secure_filename
 
-ADDRESS = 'FF:FF:00:00:9E:3F'
 WIDTH, HEIGHT, MAX_FRAMES = 96, 16, 113
 SPEEDS = (32, 64, 128, 256, 512)
 FITS = ('Fill panel', 'Fit entire image', 'Stretch to panel')
 RETRY_SECONDS = 30
 SUCCESS = 'LED sign update completed successfully'
 LOG = logging.getLogger('coolled')
+
+
+def load_address(root: Path):
+    try:
+        data = json.loads((root / 'hardware.json').read_text(encoding='utf-8-sig'))
+        value = data.get('address', '') if isinstance(data, dict) else ''
+        if not isinstance(value, str) or not re.fullmatch(r'(?:[0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}', value):
+            raise ValueError('Invalid Bluetooth address')
+        return value.upper()
+    except (OSError, ValueError) as exc:
+        raise ValueError('Display setup is missing or invalid. Run setup_player.py with your display address.') from exc
 
 
 def describe_gif(path: Path):
@@ -109,6 +119,10 @@ class DriverUpload:
         self.timeout_seconds = timeout_seconds
 
     def __call__(self, item, log, stage, cancelled, register):
+        try:
+            target_address = load_address(self.root)
+        except ValueError as exc:
+            return Result(detail=str(exc))
         repo = self.root / 'driver'
         script = repo / 'utils/tweak_sign.py'
         code = repo / 'src/coolledx/client.py'
@@ -126,7 +140,7 @@ class DriverUpload:
                     return Result(cancelled=True)
                 env = os.environ.copy()
                 env.update(PYTHONPATH=str(repo / 'src'), PYTHONUNBUFFERED='1', PYTHONIOENCODING='utf-8')
-                cmd = [sys.executable, '-u', str(script), '-a', ADDRESS, '-n', str(prepared),
+                cmd = [sys.executable, '-u', str(script), '-a', target_address, '-n', str(prepared),
                        '-N', str(item['timing']), '-w', 'scale', '-g', 'scale',
                        '--connection-timeout', '20', '--connection-retries', '1']
                 stage('Connecting to display')
@@ -550,8 +564,9 @@ def create_app(player: Player):
 def main():
     from waitress import serve
     logging.basicConfig(level=logging.INFO, format='%(asctime)s %(message)s')
-    root = Path(os.environ.get('COOLLED_ROOT', '/home/pi/CoolLED')).resolve()
+    root = Path(os.environ.get('COOLLED_ROOT', str(Path.home() / 'CoolLED'))).expanduser().resolve()
     root.mkdir(parents=True, exist_ok=True)
+    load_address(root)
     with (root / 'pi_player.lock').open('w') as instance:
         try:
             fcntl.flock(instance, fcntl.LOCK_EX | fcntl.LOCK_NB)

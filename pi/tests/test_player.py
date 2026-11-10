@@ -42,6 +42,7 @@ class Tests(unittest.TestCase):
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory()
         self.root=Path(self.temp.name)
+        (self.root/'hardware.json').write_text(json.dumps({'address':'AA:BB:CC:DD:EE:FF'}))
         (self.root/'animations').mkdir()
         gif(self.root/'animations/A.gif')
         gif(self.root/'animations/B.gif')
@@ -252,6 +253,22 @@ class Tests(unittest.TestCase):
         self.driver("print('No success marker')")
         result=run(item,logs.append,lambda _:None,threading.Event(),lambda _:None)
         self.assertFalse(result.success)
+
+    def test_driver_uses_configured_address(self):
+        self.driver("import sys; assert sys.argv[sys.argv.index('-a')+1]=='AA:BB:CC:DD:EE:FF'; print('LED sign update completed successfully')")
+        p=self.player()
+        result=DriverUpload(self.root)(p.config['items'][0],lambda _:None,
+                    lambda _:None,threading.Event(),lambda _:None)
+        self.assertTrue(result.success)
+
+    def test_missing_address_stops_without_a_bluetooth_attempt(self):
+        (self.root/'hardware.json').unlink()
+        p=self.player()
+        result=DriverUpload(self.root)(p.config['items'][0],lambda _:None,
+                    lambda _:None,threading.Event(),lambda _:None)
+        self.assertFalse(result.success)
+        self.assertFalse(result.link_error)
+        self.assertIn('setup', result.detail)
 
     def test_stuck_child_is_bounded_and_retriable(self):
         self.driver('import time; time.sleep(30)')

@@ -2,7 +2,7 @@
 
 Play animated GIFs on a compatible Bluetooth LED marquee using a Windows PC or a dedicated Raspberry Pi. Build a playlist, set an interval and let the host upload each animation in turn.
 
-**Status: private release preparation.** This first source import preserves the working personal applications. Installation still assumes an existing driver setup and some defaults match the original 96 × 16 panel. It is not a general-purpose installer or a finished public release.
+**Status: private release preparation.** Source installers for Windows and Linux now create the environment, obtain the pinned driver and save the user's display address. Automated setup checks pass, but fresh installations and Bluetooth playback still need verification on real hardware. The current canvas is fixed at 96 × 16 pixels.
 
 ## Why I built this
 
@@ -24,7 +24,7 @@ If you're not a retro arcade purist or you just want more control over a compati
 | Display unavailable | Retries the same pending animation | Retries the same pending animation |
 | Source | [windows/](windows/) | [pi/](pi/) |
 
-The Linux web player uses `fcntl` and systemd. It is not the Windows application. Its installer currently requires the username `pi` and `/home/pi/CoolLED`; other Linux setups need adaptation.
+The Linux web player uses `fcntl` and systemd. It is not the Windows application. Setup uses the account that runs it and installs into that user's `CoolLED` folder by default; a different directory can be selected with `--root`.
 
 ## How rotation works
 
@@ -50,9 +50,9 @@ The Pi uses individual uploads only. The imported Windows source still contains 
 
 ## Setup
 
-See [the setup notes](docs/SETUP.md). These describe the existing setup prerequisites and current assumptions. A new-user installation flow is still being prepared.
+See [the setup instructions](docs/SETUP.md). Windows users can run `windows/Install_CoolLED.cmd` from the full source checkout. On Linux, run `python3 setup_player.py` as your normal account. The installer lets you select a display or provide its address and includes the RGB test animation. It does not upload an animation during setup.
 
-Both applications use [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) at revision `abf781b671b7a89571711127be0094b308e7f722`, with its GATT write set to `response=False` for the tested characteristic. Driver source and Python runtimes are not bundled here.
+Both applications use [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) at revision `abf781b671b7a89571711127be0094b308e7f722`, with its GATT write set to `response=False` for the tested characteristic. Setup obtains that driver separately. Driver source and Python runtimes are not bundled in this repository.
 
 The Pi web page is intended for a trusted home network. It listens on port 8080 without a login. Do not expose it to the internet or forward its port.
 
@@ -64,7 +64,7 @@ On Linux, in an environment with the Pi requirements installed:
 python3 -m unittest discover -s pi/tests -v
 ```
 
-See [validation notes](docs/VALIDATION.md) for the distinction between automated checks and physical testing.
+Installer checks run with `python3 -m unittest discover -s tests -v`. Windows configuration checks run with `python -m unittest discover -s windows/tests -v` in an environment with Tkinter and Pillow. See [validation notes](docs/VALIDATION.md) for the distinction between automated checks and physical testing.
 
 ## Attribution, licensing and artwork
 
@@ -81,7 +81,6 @@ The player is independent of RetroPie and does not automatically change animatio
 ## Before a public release
 
 - Resolve the recorded upstream provenance question before bundling or redistributing derived driver code.
-- Replace personal hardware defaults with setup controls and provide clean-install instructions for both platforms.
 - Remove the unsuccessful Windows combined-reel option from the release interface.
 - Test fresh installations, Pi reboot and display power recovery on physical hardware.
 - Collect exact runtime notices if distributing executables or bundled environments.
