@@ -62,7 +62,9 @@ See [validation notes](docs/VALIDATION.md) for the distinction between automated
 
 See [ATTRIBUTION.md](ATTRIBUTION.md) for credits to Greg Tatham / UpDryTwist, CrimsonClyde's earlier protocol work and the runtime libraries. Original third-party notices are retained under [LICENSES/](LICENSES/), with sources and checksums in [LICENSE_SOURCES.json](LICENSE_SOURCES.json).
 
-A license for the new player code has not yet been selected. Third-party notices do not license that code. An earlier-source provenance question and Windows binary notice collection remain release preparation items.
+The original player code, project documentation and RGB test animation are **source available under the [PolyForm Noncommercial License 1.0.0](LICENSE)**. See [NOTICE](NOTICE) for the project copyright notice. Personal hobby use, modification and sharing for purposes permitted by that license are allowed. Commercial uses outside its permitted purposes require separate permission from the project owner.
+
+Third-party components retain their original licenses. This project license does not replace those terms or resolve the earlier-source provenance question recorded in ATTRIBUTION.md. Windows binary notice collection also remains a release preparation item.
 
 This import includes an RGB test GIF. Game-themed animations from the personal setup are not included. Software credits do not grant rights to game artwork or imply manufacturer endorsement.
 
@@ -70,7 +72,7 @@ The player is independent of RetroPie and does not automatically change animatio
 
 ## Before a public release
 
-- Select a license for the new player code and resolve the recorded upstream provenance question.
+- Resolve the recorded upstream provenance question before bundling or redistributing derived driver code.
 - Replace personal hardware defaults with setup controls and provide clean-install instructions for both platforms.
 - Remove the unsuccessful Windows combined-reel option from the release interface.
 - Test fresh installations, Pi reboot and display power recovery on physical hardware.
