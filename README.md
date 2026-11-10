@@ -4,6 +4,14 @@ Play animated GIFs on a compatible Bluetooth LED marquee using a Windows PC or a
 
 **Status: private release preparation.** This first source import preserves the working personal applications. Installation still assumes an existing driver setup and some defaults match the original 96 × 16 panel. It is not a general-purpose installer or a finished public release.
 
+## Why I built this
+
+I'm a novice programmer who just wanted to upload my own animations to an LED matrix. That turned out to be harder than expected. I spent several months working through the app's restrictions and Bluetooth communication issues. This player grew out of that effort to make custom animations easier to upload, organize and rotate.
+
+For my own setup, I built a full-size retro arcade cabinet from spare wood, a display and a Raspberry Pi that were lying around my shop. A static, backlit marquee felt too boring. I wanted one that moved.
+
+If you're not a retro arcade purist or you just want more control over a compatible LED matrix, this may be for you.
+
 ## Choose a player
 
 | | Windows desktop | Raspberry Pi / Linux |
