@@ -14,6 +14,10 @@ Setup does not upload an animation. Start the installed app using:
   %USERPROFILE%\CoolLED\Start_CoolLED.cmd
 
 Add GIFs, choose speed and fit, set the interval and click Start rotation.
+Check Shuffle rotation next to the interval to randomize playback. Every
+animation plays once per round, with no immediate repeat between rounds.
+The checkbox is saved and cannot change during an upload or active rotation.
+Stop rotation before editing it. A failed upload retries the same animation.
 The PC must stay awake and the application must remain running.
 X minimizes it; Exit quits. No Windows startup entry is installed.
 

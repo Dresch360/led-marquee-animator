@@ -91,7 +91,7 @@ class SetupTests(unittest.TestCase):
             self.assertEqual(setup.choose_address(Path('/unused'), self.root), '11:22:33:44:55:66')
 
     def test_settings_and_existing_animation_survive_windows_setup(self):
-        original = {'minutes':17, 'items':[{'path':'D:/my clip.gif','timing':64,'fit':'Fill panel'}]}
+        original = {'minutes':17, 'shuffle':True, 'items':[{'path':'D:/my clip.gif','timing':64,'fit':'Fill panel'}]}
         setup.write_object(self.root / 'uploader_settings.json', original)
         (self.root / 'animations').mkdir()
         sample = self.root / 'animations/CoolLED_RGB_Test.gif'
@@ -100,6 +100,7 @@ class SetupTests(unittest.TestCase):
         saved = setup.read_object(self.root / 'uploader_settings.json')
         self.assertEqual(saved['items'], original['items'])
         self.assertEqual(saved['minutes'], 17)
+        self.assertTrue(saved['shuffle'])
         self.assertEqual(saved['driver'], str(self.root / 'driver'))
         self.assertEqual(saved['python'], str(self.root / '.venv/Scripts/python.exe'))
         self.assertEqual(sample.read_bytes(), b'keep my file')

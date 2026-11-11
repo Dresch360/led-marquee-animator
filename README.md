@@ -18,7 +18,7 @@ If you're not a retro arcade purist or you just want more control over a compati
 | --- | --- | --- |
 | Interface | Tkinter desktop window | Browser page hosted on the Pi |
 | Playback host | Windows PC must stay awake with the app running | Pi runs independently of the browser and PC |
-| Playlists | Ordered rotation | Ordered rotation or shuffle |
+| Playlists | Ordered rotation or shuffle | Ordered rotation or shuffle |
 | GIF controls | Preview, speed and fit per file | Preview, selection, order, speed and fit per file |
 | Startup | Manual launch | systemd service; resumes if rotation was left running |
 | Display unavailable | Retries the same pending animation | Retries the same pending animation |
@@ -32,7 +32,9 @@ The host uploads one complete animation. The panel repeats it while the host wai
 
 On connection failures, the host keeps the same file pending and waits 30 seconds after the failed attempt before trying again. File and setup errors stop rotation. Only one uploader should control the sign at a time.
 
-The Pi player offers shuffle: every selected animation once per round, with no immediate repeat at the boundary when multiple files are selected. Closing its browser page does not stop rotation. Stop saves the stopped state; leaving rotation running allows it to resume when the service restarts.
+Both players offer shuffle: every animation in the rotation plays once per round, with no immediate repeat at the boundary when multiple files are selected. Stop rotation before changing the saved Shuffle rotation checkbox. The displayed playlist order is preserved.
+
+Closing the Pi browser page does not stop rotation. Stop saves the stopped state; leaving rotation running allows it to resume when the service restarts.
 
 In the Windows player, X minimizes the window and leaves rotation running. Exit quits the program. Windows rotation does not automatically start when the app opens.
 

@@ -5,6 +5,7 @@
 - The Windows uploader sent individual GIFs that played on the 96 × 16 sign.
 - The Pi 3 discovered the sign and sent text and GIFs that played correctly.
 - The user confirmed the original Pi page and playback worked and later reported that the shuffle update worked.
+- The Windows source installer completed in a separate test folder and the user confirmed that its window opened with the RGB test GIF. Bluetooth playback from that installation has not yet been confirmed.
 - Full combined reels did not produce acceptable playback. A 64-frame diagnostic also failed to display correctly despite a sender success message.
 
 The initial source import preserved application behavior. The subsequent setup work adds user-selected addresses, configurable installation directories and generated startup services. These repository changes have not been installed on the user's running PC or Pi.
@@ -13,7 +14,9 @@ The initial source import preserved application behavior. The subsequent setup w
 
 The Pi suite contains 27 tests covering GIF fit and frame preservation, including identical frames; playlist validation; ordered and shuffled rounds; no immediate boundary repeats; retrying the same pending item; the interval starting after upload completion; stopping and cancellation; saved running/stopped state; file validation and upload protection; CSRF tokens; child-process exit and success-marker handling; the upload watchdog; use of the configured display address; and rejection of a missing address without a Bluetooth attempt.
 
-The installer suite contains 12 tests covering address selection, cloning and patching a local fixture driver, repeat setup, Windows Git line endings, refusal to overwrite unexpected driver edits, settings and animation preservation, application backup and rollback on a simulated rename failure, generated service paths and a Linux setup flow with downloads, dependency installation and privileged operations simulated. Three Windows configuration tests cover custom paths, retained settings and the absence of a personal default display address.
+The installer suite contains 12 tests covering address selection, cloning and patching a local fixture driver, repeat setup, Windows Git line endings, refusal to overwrite unexpected driver edits, settings and animation preservation, application backup and rollback on a simulated rename failure, generated service paths and a Linux setup flow with downloads, dependency installation and privileged operations simulated. Eleven Windows tests cover configuration, retained settings, the absence of a personal default display address, shuffled rounds, no boundary repeats, retrying the same pending animation, sequential order, stop/restart and saving shuffle without reordering the playlist.
+
+An additional Windows GUI smoke test exercises the checkbox, saving Setup, disabling the checkbox during playback and re-enabling it after Stop. It requires a graphical display. The local virtual-display attempt was blocked by the execution environment's socket restrictions, so that test remains unverified here; it is skipped when no display is available. The updated Windows checkbox and physical shuffled playback still need checking on the user's PC.
 
 The actual pinned upstream driver was also cloned from the local audit mirror, patched and checked by importing its command-line tool and running `--help`. Generated systemd units passed `systemd-analyze verify` using fixture executables and a stub Bluetooth unit, including an installation path with spaces, percent signs and a dollar sign. These checks did not start services or communicate with Bluetooth.
 

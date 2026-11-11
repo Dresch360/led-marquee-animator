@@ -44,6 +44,8 @@ The default installation directory is `%USERPROFILE%\CoolLED`. When setup finish
 
 Add GIFs, set their order, speed and fit, then use Send selected or Start rotation. The PC must stay awake and the application must remain running. X minimizes it; Exit quits. No Windows startup entry is installed.
 
+Check **Shuffle rotation** next to the rotation interval for a random order. It plays every animation once per round and avoids an immediate repeat at round boundaries. The setting is saved without rearranging the visible playlist. Stop rotation before changing it; the checkbox is disabled while uploading or rotating. Connection failures retry the same pending animation.
+
 The imported combined-reel option is still experimental and caused unacceptable frame loss in the personal setup. Use individual rotation.
 
 For a separate test installation, provide a new directory and your actual display address. The address below is an example that you must replace:

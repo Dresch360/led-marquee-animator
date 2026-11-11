@@ -10,6 +10,7 @@ import math
 import os
 from pathlib import Path
 import queue
+import random
 import re
 import subprocess
 import tempfile
@@ -56,6 +57,7 @@ class Settings:
     python: str
     minutes: float = 5.0
     items: list[Item] = field(default_factory=list)
+    shuffle: bool = False
 
     @classmethod
     def defaults(cls, home: Path | None = None):
@@ -95,9 +97,12 @@ def load_settings(path: Path):
             fit = entry.get('fit', FITS[0])
             items.append(Item(entry['path'], timing, fit if fit in FITS else FITS[0]))
         minutes = validate_interval(data.get('minutes', 5))
+        shuffle = data.get('shuffle', False)
+        if not isinstance(shuffle, bool):
+            raise ValueError('Shuffle must be true or false')
         return Settings(str(data.get('address', default.address)),
                         str(data.get('driver', default.driver)),
-                        str(data.get('python', default.python)), minutes, items), ''
+                        str(data.get('python', default.python)), minutes, items, shuffle), ''
     except (OSError, ValueError, TypeError, OverflowError) as exc:
         return default, f'Settings could not be read; defaults loaded. {exc}'
 
@@ -318,8 +323,27 @@ class Rotation:
     index: int = 0
     deadline: float | None = None
     waiting: bool = False
+    shuffle: bool = False
+    order: list[int] = field(default_factory=list)
+    position: int = 0
+    rng: random.Random = field(default_factory=random.Random, repr=False)
 
-    def start(self, index=0):
+    def _round(self, length, previous=None):
+        order = list(range(length))
+        self.rng.shuffle(order)
+        if length > 1 and order[0] == previous:
+            other = self.rng.randrange(1, length)
+            order[0], order[other] = order[other], order[0]
+        return order
+
+    def start(self, index=0, *, length=1, shuffle=False):
+        if length < 1 or not 0 <= index < length:
+            raise ValueError('Choose an animation in a nonempty playlist.')
+        self.shuffle = shuffle
+        self.order = self._round(length) if shuffle else []
+        self.position = 0
+        if shuffle:
+            index = self.order[0]
         self.running, self.index, self.deadline = True, index, None
         self.waiting = False
 
@@ -337,7 +361,14 @@ class Rotation:
         if self.running and self.deadline is not None and now >= self.deadline:
             self.deadline = None
             if not self.waiting:
-                self.index = (self.index + 1) % length
+                if self.shuffle:
+                    self.position += 1
+                    if self.position >= len(self.order):
+                        self.order = self._round(length, previous=self.index)
+                        self.position = 0
+                    self.index = self.order[self.position]
+                else:
+                    self.index = (self.index + 1) % length
             return self.index
         return None
 
@@ -369,6 +400,7 @@ class Uploader:
         self.speed = tk.StringVar(value='Normal (128)')
         self.fit = tk.StringVar(value=FITS[0])
         self.minutes = tk.StringVar(value=f'{self.settings.minutes:g}')
+        self.shuffle_var = tk.BooleanVar(value=self.settings.shuffle)
         self.file_info = tk.StringVar(value='Choose an animation from the playlist.')
         self.build_ui()
         self.refresh_list()
@@ -447,7 +479,9 @@ class Uploader:
         self.interval_box = ttk.Spinbox(rotation_row, textvariable=self.minutes, from_=0.1, to=1440, increment=0.5, width=7)
         self.interval_box.pack(side='left', padx=8)
         ttk.Label(rotation_row, text='minutes after each completed upload').pack(side='left')
-        ttk.Label(rotation_row, text='Auto-reconnect enabled', font=('Segoe UI', 9)).pack(side='right')
+        self.shuffle_box = ttk.Checkbutton(rotation_row, text='Shuffle rotation',
+                                          variable=self.shuffle_var, command=self.change_shuffle)
+        self.shuffle_box.pack(side='right')
         action_row = ttk.Frame(outer)
         action_row.pack(fill='x')
         self.send_button = ttk.Button(action_row, text='Send selected', style='Accent.TButton', command=self.send_selected)
@@ -601,9 +635,17 @@ class Uploader:
         for button in self.edit_buttons + [self.setup_button, self.send_button, self.start_button, self.combined_button]:
             button.configure(state=state)
         self.interval_box.configure(state=state)
+        self.shuffle_box.configure(state=state)
         for box in (self.speed_box, self.fit_box):
             box.configure(state='disabled' if busy else 'readonly')
         self.stop_button.configure(state='normal' if busy else 'disabled')
+
+    def change_shuffle(self):
+        if self.job or self.rotation.running:
+            self.shuffle_var.set(self.settings.shuffle)
+            return
+        self.settings.shuffle = bool(self.shuffle_var.get())
+        self.persist()
 
     def send_selected(self):
         index = self.selected_index()
@@ -735,8 +777,8 @@ class Uploader:
             return
         self.persist()
         index = self.selected_index() or 0
-        self.rotation.start(index)
-        self.begin_upload(index)
+        self.rotation.start(index, length=len(self.settings.items), shuffle=self.settings.shuffle)
+        self.begin_upload(self.rotation.index)
 
     def begin_upload(self, index):
         if self.job:
@@ -850,7 +892,9 @@ class Uploader:
                 if self.rotation.waiting:
                     self.countdown.set(f'Waiting for display · Retry in {remaining // 60}:{remaining % 60:02d} · Stop cancels retries')
                 else:
-                    self.countdown.set(f'Playing {self.rotation.index + 1} of {len(self.settings.items)} · Next in {remaining // 60}:{remaining % 60:02d} · Keep this app open')
+                    prefix = (f'Shuffle · {self.rotation.position + 1} of {len(self.settings.items)} this round'
+                              if self.rotation.shuffle else f'Playing {self.rotation.index + 1} of {len(self.settings.items)}')
+                    self.countdown.set(f'{prefix} · Next in {remaining // 60}:{remaining % 60:02d} · Keep this app open')
             elif self.job:
                 self.countdown.set((f'Reconnecting · Pending animation {self.rotation.index + 1} of {len(self.settings.items)}'
                                     if self.rotation.waiting else
@@ -879,7 +923,7 @@ class Uploader:
                 ttk.Button(body, text='Browse…', command=browse).grid(row=row * 2 + 1, column=1, padx=(8, 0))
         ttk.Label(body, text='Use your display address and the driver/environment created by the installer.', font=('Segoe UI', 9)).grid(row=6, column=0, sticky='w', pady=12)
         def save():
-            candidate = Settings(values['address'].get().strip(), values['driver'].get().strip(), values['python'].get().strip(), self.settings.minutes, self.settings.items)
+            candidate = Settings(values['address'].get().strip(), values['driver'].get().strip(), values['python'].get().strip(), self.settings.minutes, self.settings.items, self.settings.shuffle)
             try:
                 validate_setup(candidate)
             except (OSError, ValueError) as exc:
