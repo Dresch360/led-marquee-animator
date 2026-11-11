@@ -6,6 +6,10 @@ Play animated GIFs on a compatible Bluetooth LED marquee using a Windows PC or a
 
 ## Demo
 
+<img src="https://github.com/user-attachments/assets/df71d001-9867-4811-a056-06e58253ff35" alt="Personal arcade cabinet with a Bluetooth LED marquee" width="420" />
+
+*Personal arcade cabinet. Photo retouched for lighting and background cleanup.*
+
 https://github.com/user-attachments/assets/98338a16-45da-4702-ae16-6db2376be863
 
 A short clip of the LED marquee in the personal arcade cabinet.
