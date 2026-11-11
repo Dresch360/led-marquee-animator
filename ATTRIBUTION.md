@@ -1,6 +1,6 @@
 # Attribution and third-party credits
 
-Arcade LED Player adds Windows and Pi interfaces, playlists and scheduling
+LED Marquee Animator adds Windows and Pi interfaces, playlists and scheduling
 around the CoolLEDX Bluetooth driver. Credits and third-party notices are
 recorded below.
 

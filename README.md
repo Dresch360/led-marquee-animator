@@ -1,6 +1,8 @@
-# Arcade LED Player
+# LED Marquee Animator
 
-Play animated GIFs on a compatible Bluetooth LED marquee using a Windows PC or a dedicated Raspberry Pi. Build a playlist, set an interval and rotate animations in order or shuffle them.
+**Your marquee. Your animations.**
+
+Upload your own animated GIFs to a compatible Bluetooth LED marquee. Build playlists, adjust playback and rotate or shuffle animations using Windows or a dedicated Raspberry Pi.
 
 **Experimental source release.** Tested on a 96 × 16 CoolLEDX-compatible sign using Windows and a Raspberry Pi 3.
 

@@ -1,4 +1,4 @@
-ARCADE LED PLAYER: WINDOWS DESKTOP
+LED MARQUEE ANIMATOR: WINDOWS DESKTOP
 
 Extract or clone the entire repository. Install Python 3.13 with the Python
 launcher and Tkinter, plus Git for Windows. Then double-click:

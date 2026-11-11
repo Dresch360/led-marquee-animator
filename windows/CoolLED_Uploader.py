@@ -417,7 +417,7 @@ class Uploader:
 
     def build_ui(self):
         root = self.root
-        root.title('CoolLED Uploader')
+        root.title('LED Marquee Animator')
         root.geometry('860x830')
         root.minsize(800, 790)
         root.configure(bg='#f3f5f7')
@@ -433,7 +433,7 @@ class Uploader:
         outer.pack(fill='both', expand=True)
         header = ttk.Frame(outer)
         header.pack(fill='x')
-        ttk.Label(header, text='CoolLED Uploader', font=('Segoe UI', 22, 'bold')).pack(side='left')
+        ttk.Label(header, text='LED Marquee Animator', font=('Segoe UI', 22, 'bold')).pack(side='left')
         self.exit_button = ttk.Button(header, text='Exit', command=self.close)
         self.exit_button.pack(side='right', padx=(8, 0))
         self.setup_button = ttk.Button(header, text='Setup', command=self.setup)
@@ -981,6 +981,6 @@ if __name__ == '__main__':
             pass
         if os.name == 'nt':
             import ctypes
-            ctypes.windll.user32.MessageBoxW(None, f'The uploader could not start.\n\nSee:\n{error_path}', 'CoolLED Uploader', 16)
+            ctypes.windll.user32.MessageBoxW(None, f'The uploader could not start.\n\nSee:\n{error_path}', 'LED Marquee Animator', 16)
         else:
             raise

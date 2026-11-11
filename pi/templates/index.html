@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="csrf-token" content="{{ token }}">
-  <title>CoolLED Player</title>
+  <title>LED Marquee Animator</title>
   <link rel="stylesheet" href="/static/style.css">
   <script src="/static/app.js" defer></script>
 </head>
 <body>
 <main>
-  <header><div><p class="eyebrow">ARCADE DISPLAY</p><h1>CoolLED Player<span class="dot">.</span></h1></div><div id="badge" class="badge">Connecting</div></header>
+  <header><div><p class="eyebrow">CUSTOM LED ANIMATIONS</p><h1>LED Marquee Animator<span class="dot">.</span></h1></div><div id="badge" class="badge">Connecting</div></header>
   <section class="panel status-panel">
     <div class="status-head"><div><p class="label">DISPLAY STATUS</p><h2 id="phase">Loading player…</h2><p id="current" class="muted">Connecting to your Pi</p></div><div class="timer"><span id="remaining">—</span><small id="timer-label">NEXT ANIMATION</small></div></div>
     <div id="error" class="error" role="alert" hidden></div>

@@ -27,13 +27,13 @@ Keep the top-level `setup_player.py`, `tools`, `pi`, `windows` and license files
 Alternatively, in PowerShell, clone the repository into your user folder:
 
 ```powershell
-git clone https://github.com/Dresch360/arcade-led-player.git "$env:USERPROFILE\arcade-led-player"
+git clone https://github.com/Dresch360/led-marquee-animator.git "$env:USERPROFILE\led-marquee-animator"
 ```
 
 Then run:
 
 ```powershell
-py -3.13 "$env:USERPROFILE\arcade-led-player\setup_player.py"
+py -3.13 "$env:USERPROFILE\led-marquee-animator\setup_player.py"
 ```
 
 The default installation directory is `%USERPROFILE%\CoolLED`. When setup finishes, open:
@@ -65,11 +65,11 @@ sudo apt install -y git python3-venv bluez rfkill
 ```
 
 ```bash
-git clone https://github.com/Dresch360/arcade-led-player.git "$HOME/arcade-led-player"
+git clone https://github.com/Dresch360/led-marquee-animator.git "$HOME/led-marquee-animator"
 ```
 
 ```bash
-python3 "$HOME/arcade-led-player/setup_player.py"
+python3 "$HOME/led-marquee-animator/setup_player.py"
 ```
 
 The default installation directory is `$HOME/CoolLED`. After downloading dependencies, setup scans for your display unless you provided `--address` or have a saved address. It then requests sudo to install these systemd services:
@@ -84,7 +84,7 @@ Stop rotation before adding GIFs or changing settings, then start it again. Clos
 To choose a different installation directory, use `--root "/absolute/path/to/CoolLED"`. To install without systemd startup:
 
 ```bash
-python3 "$HOME/arcade-led-player/setup_player.py" --no-service
+python3 "$HOME/led-marquee-animator/setup_player.py" --no-service
 ```
 
 Setup prints a correctly quoted foreground launch command for that directory. In foreground mode, the process must stay running. There is only one systemd player instance per host; installing with services into a different directory repoints that instance to the new directory.

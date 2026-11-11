@@ -1,4 +1,4 @@
-ARCADE LED PLAYER: PI / LINUX WEB PLAYER
+LED MARQUEE ANIMATOR: PI / LINUX WEB PLAYER
 
 From the full source checkout, run as your normal account:
   python3 setup_player.py

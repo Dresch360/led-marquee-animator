@@ -209,7 +209,7 @@ def service_units(root, username, rfkill, bluetoothctl):
     if not re.fullmatch(r'[A-Za-z_][A-Za-z0-9_.-]*\$?', username):
         raise ValueError('Unsupported system account name.')
     bluetooth = f'''[Unit]
-Description=Enable Bluetooth for Arcade LED Player
+Description=Enable Bluetooth for LED Marquee Animator
 Wants=bluetooth.service
 After=bluetooth.service
 StartLimitIntervalSec=0
@@ -227,7 +227,7 @@ TimeoutStartSec=30
 WantedBy=multi-user.target
 '''
     player = f'''[Unit]
-Description=Arcade LED Player and local controls
+Description=LED Marquee Animator and local controls
 Wants=coolled-bluetooth.service
 After=coolled-bluetooth.service
 StartLimitIntervalSec=0
