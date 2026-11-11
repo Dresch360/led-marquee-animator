@@ -2,7 +2,9 @@
 
 **Your marquee. Your animations.**
 
-Upload your own animated GIFs to a compatible Bluetooth LED marquee. Build playlists, adjust playback and rotate or shuffle animations using Windows or a dedicated Raspberry Pi.
+Upload your own animated GIFs to a compatible Bluetooth LED marquee. Organize playlists, adjust playback and rotate or shuffle your animations.
+
+Run the player on Windows or let a dedicated Raspberry Pi handle playback independently **without keeping a PC running**.
 
 **Experimental source release.** Tested on a 96 × 16 CoolLEDX-compatible sign using Windows and a Raspberry Pi 3.
 
