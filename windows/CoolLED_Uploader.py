@@ -488,8 +488,6 @@ class Uploader:
         self.send_button.pack(side='left')
         self.start_button = ttk.Button(action_row, text='Start rotation', command=self.start_rotation)
         self.start_button.pack(side='left', padx=8)
-        self.combined_button = ttk.Button(action_row, text='Upload combined reel…', command=self.open_combined)
-        self.combined_button.pack(side='left', padx=(0, 8))
         self.stop_button = ttk.Button(action_row, text='Stop', command=self.stop, state='disabled')
         self.stop_button.pack(side='left')
         self.progress = ttk.Progressbar(action_row, mode='indeterminate', length=150)
@@ -632,7 +630,7 @@ class Uploader:
     def set_controls(self):
         busy = self.job is not None or self.rotation.running
         state = 'disabled' if busy else 'normal'
-        for button in self.edit_buttons + [self.setup_button, self.send_button, self.start_button, self.combined_button]:
+        for button in self.edit_buttons + [self.setup_button, self.send_button, self.start_button]:
             button.configure(state=state)
         self.interval_box.configure(state=state)
         self.shuffle_box.configure(state=state)

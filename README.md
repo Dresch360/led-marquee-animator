@@ -62,7 +62,7 @@ GIFs are converted to eight primary RGB colors and scaled, padded or stretched t
 
 The on-sign 0–100% transfer can take around 30 seconds in the tested setup. This project does not eliminate that delay. A sender's success message alone does not prove correct panel playback.
 
-The Pi uses individual uploads only. The imported Windows source still contains an experimental combined-reel option that reduces frames to fit a 48-frame budget. It produced unacceptable missing frames in the personal setup and is not the recommended playback path.
+Both players use individual uploads and playlist rotation. Experimental combined-reel code is retained internally in the Windows source but is not exposed in the interface because it produced unacceptable missing frames in the personal setup.
 
 ## Setup
 
@@ -97,7 +97,6 @@ The player is independent of RetroPie and does not automatically change animatio
 ## Before a public release
 
 - Resolve the recorded upstream provenance question before bundling or redistributing derived driver code.
-- Remove the unsuccessful Windows combined-reel option from the release interface.
 - Test fresh installations, Pi reboot and display power recovery on physical hardware.
 - Collect exact runtime notices if distributing executables or bundled environments.
 - Add screenshots after the release interface is settled.

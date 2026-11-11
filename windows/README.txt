@@ -21,8 +21,9 @@ Stop rotation before editing it. A failed upload retries the same animation.
 The PC must stay awake and the application must remain running.
 X minimizes it; Exit quits. No Windows startup entry is installed.
 
-Use normal individual rotation. The imported combined-reel option remains
-experimental and caused unacceptable frame loss in the personal setup.
+Use individual uploads or playlist rotation. Combined-reel upload is not
+exposed in the interface because it caused unacceptable frame loss in the
+personal setup.
 
 For custom paths or Python 3.11/3.12, invoke setup_player.py directly.
 Use --root for the installation directory. The installed launcher detects
