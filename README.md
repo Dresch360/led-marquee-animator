@@ -6,7 +6,7 @@ Play animated GIFs on a compatible Bluetooth LED marquee using a Windows PC or a
 
 ## Demo
 
-[Watch the marquee demo](CoolLED_Marquee_Demo.mp4)
+https://github.com/user-attachments/assets/98338a16-45da-4702-ae16-6db2376be863
 
 A short clip of the LED marquee in the personal arcade cabinet.
 
