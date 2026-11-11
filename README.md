@@ -10,9 +10,9 @@ Run the player on Windows or let a dedicated Raspberry Pi handle playback indepe
 
 ## Demo
 
-<img src="https://github.com/user-attachments/assets/df71d001-9867-4811-a056-06e58253ff35" alt="Personal arcade cabinet with a Bluetooth LED marquee" width="420" />
+<img src="https://github.com/user-attachments/assets/773373bb-92d6-4830-9e44-9967ad3b4354" alt="Personal arcade cabinet with a Bluetooth LED marquee" width="403" />
 
-*Personal arcade cabinet. Photo retouched for lighting and background cleanup.*
+*Personal arcade cabinet with the LED marquee running.*
 
 <img src="https://github.com/user-attachments/assets/9f44ad49-5874-428b-ac14-c2ec6cda230f" alt="LED marquee displaying 86 percent upload progress" width="720" />
 
