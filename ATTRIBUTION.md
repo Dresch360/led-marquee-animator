@@ -1,9 +1,8 @@
 # Attribution and third-party credits
 
-This project adds player interfaces and scheduling around an existing CoolLEDX
-Bluetooth driver. It does not claim authorship of the original protocol or its
-reverse engineering. These notices accompany this source import; they do not certify a completed
-public-release license review.
+Arcade LED Player adds Windows and Pi interfaces, playlists and scheduling
+around the CoolLEDX Bluetooth driver. Credits and third-party notices are
+recorded below.
 
 ## Upstream driver
 
@@ -15,7 +14,8 @@ Its original notice is **Copyright (c) 2025 Greg Tatham**, under the MIT License
 The complete, unedited license is retained at
 `LICENSES/coolledx-driver/abf781b671b7a89571711127be0094b308e7f722/LICENSE`.
 The local compatibility change sets GATT writes to `response=False` for the
-tested characteristic. 
+tested characteristic.
+
 ## Earlier protocol work
 
 The driver's README credits **CrimsonClyde** and
@@ -23,13 +23,6 @@ The driver's README credits **CrimsonClyde** and
 reverse engineering and implementation work. We retain that acknowledgment,
 attributed to the upstream README. This repository does not directly bundle
 files from LED FaceShields.
-
-**Provenance follow-up:** at inspected revision
-`afb98c514147123b7232d60f02b3ac4aa38acd75`, no explicit license file or permission
-statement was found in its README or Python sources checked. This does not
-establish whether the driver author received separate permission. Clarify that
-history before bundling or redistributing derived driver code publicly.
-Attribution alone does not resolve this question.
 
 ## Player additions
 
@@ -41,14 +34,14 @@ The original player code, project documentation and RGB test animation are
 offered under the MIT License in the root `LICENSE`.
 The project copyright notice is in `NOTICE`. This license applies to the
 original project files; third-party components and retained notices keep
-their own licenses. It does not resolve the earlier-source provenance question.
+their own licenses.
 
 ## Runtime libraries
 
 The following versions match the Pi installation recorded during setup.
 Complete retained notices are under `LICENSES/`. `LICENSE_SOURCES.json` records
-their sources and checksums. Refresh the inventory for every public build,
-because most transitive dependencies are not pinned by the application.
+their sources and checksums. This inventory describes the recorded Pi environment;
+resolved versions can differ because most transitive dependencies are not pinned.
 
 | Component | Version | Role | License / attribution |
 | --- | --- | --- | --- |
@@ -67,23 +60,11 @@ because most transitive dependencies are not pinned by the application.
 Python and, for the desktop player, Tkinter/Tk provide the runtime and GUI
 framework. This source repository does not bundle a Python or Tk runtime.
 
-### Windows binary-build follow-up
-
-The desktop player uses Bleak and Pillow. Bleak additionally installs the
-Windows-specific `winrt-runtime` and `winrt-Windows.*` Bluetooth, Enumeration,
-Foundation and Streams packages. These dependency distributions are not bundled
-in this source repository. Before shipping a Windows executable, installer or
-bundled environment, collect its exact dependencies and retain their own notices,
-including Windows Pillow binary notices and any bundled Python/Tk notices.
-The Pi inventory above is not a complete Windows binary license audit.
-
 ## Artwork and compatibility names
 
-These software licenses and credits do not grant rights to game characters,
-logos or other third-party artwork. Game-themed GIFs made for the personal
-setup are not cleared for a public animation pack by this document. Use original
-generic demos or appropriately licensed assets for public distribution, and
-review recognizable artwork separately.
+The bundled sample is a generic RGB test animation. Game-themed animations
+from the personal setup are not included. Game artwork visible in the photos
+and video is not covered by the software license.
 
 CoolLEDX, CoolLED1248, Raspberry Pi, RetroPie and game names identify
 compatibility or subject matter. No endorsement or affiliation is claimed.

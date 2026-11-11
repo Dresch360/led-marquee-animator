@@ -1,6 +1,6 @@
 # Install from source
 
-The installers are new and still need fresh-install checks on real Windows and Pi hardware. The existing personal setup has played animations successfully; that does not verify every new installation path. The repository is currently private, so downloading it requires an account with access.
+These instructions install the Windows desktop player or Pi/Linux web player from source. See [validation notes](VALIDATION.md) for tested hardware and installation coverage.
 
 ## Requirements
 
@@ -46,15 +46,7 @@ Add GIFs, set their order, speed and fit, then use Send selected or Start rotati
 
 Check **Shuffle rotation** next to the rotation interval for a random order. It plays every animation once per round and avoids an immediate repeat at round boundaries. The setting is saved without rearranging the visible playlist. Stop rotation before changing it; the checkbox is disabled while uploading or rotating. Connection failures retry the same pending animation.
 
-The imported combined-reel option is still experimental and caused unacceptable frame loss in the personal setup. Use individual rotation.
-
-For a separate test installation, provide a new directory and your actual display address. The address below is an example that you must replace:
-
-```powershell
-py -3.13 "$env:USERPROFILE\arcade-led-player\setup_player.py" --root "$env:USERPROFILE\CoolLED_Test" --address "AA:BB:CC:DD:EE:FF"
-```
-
-The installed launcher detects its own installation folder. When running the source application directly with a custom data folder, set `COOLLED_ROOT` to that folder first.
+For a custom installation directory, pass `--root` with an absolute path. The installed launcher uses its own installation folder.
 
 Python 3.11 or 3.12 users can invoke `setup_player.py` explicitly with their installed Python version instead of the double-click installer.
 
@@ -87,7 +79,7 @@ The default installation directory is `$HOME/CoolLED`. After downloading depende
 
 Open `http://<your-linux-host-ip>:8080` from a browser on the same trusted home network. Use your actual host IP. The page has no login; do not expose or forward its port to the internet.
 
-Stop rotation before adding GIFs or changing settings, then start it again. Closing the browser or shutting down the browsing PC does not stop the Pi. Leaving rotation running allows it to resume after a service restart; Stop saves the stopped state.
+Stop rotation before adding GIFs or changing settings, then start it again. Closing the browser or shutting down the browsing PC does not stop the Pi. The system service starts at boot without a console or desktop login. Leaving rotation running allows it to resume after a service restart; Stop saves the stopped state.
 
 To choose a different installation directory, use `--root "/absolute/path/to/CoolLED"`. To install without systemd startup:
 
@@ -117,7 +109,7 @@ Rerun the installer from an updated source checkout to update that installation.
 
 Existing animations are not overwritten. Pi playlist settings are preserved byte for byte. Windows playlist entries, speeds, fit and interval are retained while the configured driver, Python path and Bluetooth address are updated.
 
-The previous application is kept in a timestamped `Player.before-*` directory. Hardware and Windows settings files are also backed up before replacement. These backups do not constitute a full environment rollback: dependencies and service configuration may also change. A failed setup reports its error; check it before restarting or retrying.
+The previous application is kept in a timestamped `Player.before-*` directory. Hardware and Windows settings files are also backed up before replacement. Dependencies and service settings are updated separately from these application backups. If setup fails, check its reported error before retrying.
 
 The installer uses driver revision `abf781b671b7a89571711127be0094b308e7f722`. It applies only the known `response=False` Bluetooth write patch and accepts Windows Git line-ending conversion. A different revision or other changes to the driver's client file cause setup to stop without overwriting that file. Existing extra edits elsewhere in the driver are left in place.
 

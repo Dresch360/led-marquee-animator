@@ -1,37 +1,32 @@
-# Validation and remaining checks
+# Validation
 
-## Physical observations from the personal setup
+## Personal setup
 
-- The Windows uploader sent individual GIFs that played on the 96 × 16 sign.
-- The Pi 3 discovered the sign and sent text and GIFs that played correctly.
-- The user confirmed the original Pi page and playback worked and later reported that the shuffle update worked.
-- The Windows source installer completed in a separate test folder and the user confirmed that its window opened with the RGB test GIF. Bluetooth playback from that installation has not yet been confirmed.
-- Full combined reels did not produce acceptable playback. A 64-frame diagnostic also failed to display correctly despite a sender success message.
+The player has been tested with a GOTUS CoolLED1248-app-compatible sign advertising as `CoolLEDX`, using a 96 × 16 canvas.
 
-The initial source import preserved application behavior. The subsequent setup work adds user-selected addresses, configurable installation directories and generated startup services. These repository changes have not been installed on the user's running PC or Pi.
+Confirmed behavior:
 
-## Automated coverage
+- Individual GIF uploads and playback from Windows.
+- Text and GIF uploads and playback from a Raspberry Pi 3.
+- Pi web controls and shuffle.
+- Pi playback after reboot without logging in.
 
-The Pi suite contains 27 tests covering GIF fit and frame preservation, including identical frames; playlist validation; ordered and shuffled rounds; no immediate boundary repeats; retrying the same pending item; the interval starting after upload completion; stopping and cancellation; saved running/stopped state; file validation and upload protection; CSRF tokens; child-process exit and success-marker handling; the upload watchdog; use of the configured display address; and rejection of a missing address without a Bluetooth attempt.
+The Windows source installer also completed in a separate test folder and opened the application with the RGB test GIF. Bluetooth playback from that separate installation has not been confirmed.
 
-The installer suite contains 12 tests covering address selection, cloning and patching a local fixture driver, repeat setup, Windows Git line endings, refusal to overwrite unexpected driver edits, settings and animation preservation, application backup and rollback on a simulated rename failure, generated service paths and a Linux setup flow with downloads, dependency installation and privileged operations simulated. Eleven Windows tests cover configuration, retained settings, the absence of a personal default display address, shuffled rounds, no boundary repeats, retrying the same pending animation, sequential order, stop/restart and saving shuffle without reordering the playlist.
+## Automated tests
 
-An additional Windows GUI smoke test exercises the checkbox, saving Setup, disabling the checkbox during playback and re-enabling it after Stop. It requires a graphical display. The local virtual-display attempt was blocked by the execution environment's socket restrictions, so that test remains unverified here; it is skipped when no display is available. The updated Windows checkbox and physical shuffled playback still need checking on the user's PC.
+| Suite | Coverage |
+| --- | --- |
+| Installer | Address selection, driver setup, updates, backups and service configuration |
+| Pi player | GIF conversion, playlists, shuffle, retries, settings and upload handling |
+| Windows player | Configuration, playlists, shuffle, retries and saved settings |
 
-The actual pinned upstream driver was also cloned from the local audit mirror, patched and checked by importing its command-line tool and running `--help`. Generated systemd units passed `systemd-analyze verify` using fixture executables and a stub Bluetooth unit, including an installation path with spaces, percent signs and a dollar sign. These checks did not start services or communicate with Bluetooth.
+The latest Windows UI cleanup passed all 11 nonvisual tests. Its GUI smoke test was skipped because no graphical display was available. Automated tests simulate Bluetooth behavior and do not replace checking the physical sign.
 
-These tests simulate the driver and Bluetooth results. They cannot prove physical playback or controller capacity.
+## Known limits
 
-Prior development also exercised the web controls against a local Waitress server using a DOM environment, including saving, uploads, shuffle and start/stop. This was not a complete native-browser rendering test. The user separately viewed the page on their own network.
+- Only the personal 96 × 16 CoolLEDX setup has been physically tested.
+- 48-frame clips played correctly; a 64-frame diagnostic did not. Higher frame counts accepted by the application are not verified panel capacity.
+- Full playback from fresh installations, physical shuffle round boundaries, closed-browser playback, display power recovery and reboot with rotation saved as stopped have not all been verified.
 
-## Before claiming general compatibility
-
-- Test a clean Windows installation and a clean Pi installation using the documented release flow.
-- Watch a complete shuffled round on the sign, including the round boundary.
-- Verify playback continues with the browser closed.
-- Verify display power-off waiting and recovery after power-on.
-- Verify Pi reboot, Bluetooth availability and saved running/stopped behavior.
-- Check the actual frame and payload limits for each claimed controller variant.
-- Check power stability on the target Pi. The prototype recorded historical undervoltage/throttling; its resolution was not established.
-
-A success log means the sender completed its checks. Always inspect the physical panel when validating a new controller, upload mode or frame limit.
+See the [setup guide](SETUP.md) for installation and service commands.

@@ -27,6 +27,6 @@ installation directory. The installed code is in its Player subdirectory.
 Service: coolled-player.service
 
 See docs/SETUP.md and docs/VALIDATION.md in the source repository for
-installation, update backups and remaining physical checks.
+installation, update backups and recorded validation coverage.
 The root LICENSE and NOTICE offer original project files under MIT.
 Third-party licenses and attribution are retained alongside this file.

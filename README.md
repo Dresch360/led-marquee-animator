@@ -1,8 +1,8 @@
 # Arcade LED Player
 
-Play animated GIFs on a compatible Bluetooth LED marquee using a Windows PC or a dedicated Raspberry Pi. Build a playlist, set an interval and let the host upload each animation in turn.
+Play animated GIFs on a compatible Bluetooth LED marquee using a Windows PC or a dedicated Raspberry Pi. Build a playlist, set an interval and rotate animations in order or shuffle them.
 
-**Status: private release preparation.** Source installers for Windows and Linux now create the environment, obtain the pinned driver and save the user's display address. Automated setup checks pass, but fresh installations and Bluetooth playback still need verification on real hardware. The current canvas is fixed at 96 × 16 pixels.
+**Experimental source release.** Tested on a 96 × 16 CoolLEDX-compatible sign using Windows and a Raspberry Pi 3.
 
 ## Demo
 
@@ -30,73 +30,65 @@ If you're not a retro arcade purist or you just want more control over a compati
 
 | | Windows desktop | Raspberry Pi / Linux |
 | --- | --- | --- |
-| Interface | Tkinter desktop window | Browser page hosted on the Pi |
-| Playback host | Windows PC must stay awake with the app running | Pi runs independently of the browser and PC |
+| Controls | Desktop application | Web page on your home network |
+| Playback host | Windows PC stays awake with the app running | Pi runs in the background |
 | Playlists | Ordered rotation or shuffle | Ordered rotation or shuffle |
-| GIF controls | Preview, speed and fit per file | Preview, selection, order, speed and fit per file |
-| Startup | Manual launch | systemd service; resumes if rotation was left running |
-| Display unavailable | Retries the same pending animation | Retries the same pending animation |
+| GIF settings | Preview, speed and fit per animation | Preview, speed and fit per animation |
+| Startup | Open the app manually | Starts at boot without logging in |
 | Source | [windows/](windows/) | [pi/](pi/) |
 
-The Linux web player uses `fcntl` and systemd. It is not the Windows application. Setup uses the account that runs it and installs into that user's `CoolLED` folder by default; a different directory can be selected with `--root`.
+## Install
 
-## How rotation works
+Follow the [setup instructions](docs/SETUP.md).
 
-The host uploads one complete animation. The panel repeats it while the host waits for the selected interval, then the host uploads the next file. The interval begins after an upload completes. The host remains responsible for the playlist.
+- **Windows:** download the full repository and run `windows/Install_CoolLED.cmd`.
+- **Pi / Linux:** run `python3 setup_player.py` as your normal account.
 
-On connection failures, the host keeps the same file pending and waits 30 seconds after the failed attempt before trying again. File and setup errors stop rotation. Only one uploader should control the sign at a time.
+Setup installs the player, downloads the Bluetooth driver and lets you choose your display. It includes a generic RGB test animation.
 
-Both players offer shuffle: every animation in the rotation plays once per round, with no immediate repeat at the boundary when multiple files are selected. Stop rotation before changing the saved Shuffle rotation checkbox. The displayed playlist order is preserved.
+## Use
 
-Closing the Pi browser page does not stop rotation. Stop saves the stopped state; leaving rotation running allows it to resume when the service restarts.
+1. Add GIFs to the playlist.
+2. Choose each animation's speed and fit.
+3. Set the rotation interval and optionally enable **Shuffle rotation**.
+4. Click **Start rotation** to run the playlist. Windows also offers **Send selected** for a single animation.
 
-In the Windows player, X minimizes the window and leaves rotation running. Exit quits the program. Windows rotation does not automatically start when the app opens.
+The panel repeats the current animation until the host sends the next one. The rotation interval starts after each upload finishes. Keep only one player connected to the sign at a time.
 
-## Compatibility and animation limits
+Shuffle plays each animation once per round and avoids immediate repeats between rounds. Stop rotation before changing the playlist or shuffle setting. Connection failures retry the same pending animation.
 
-The personal setup has played animations on a GOTUS CoolLED1248-app-compatible sign advertising as `CoolLEDX`, using a 96 × 16 pixel canvas. Compatibility with other sizes, controllers or firmware is unverified. This is not a HUB75 panel driver.
+**Windows:** X minimizes the window and keeps rotation running. **Exit** quits. The PC must stay awake.
 
-GIFs are converted to eight primary RGB colors and scaled, padded or stretched to the canvas. Lower speed values play faster. Short, low-resolution GIFs work best.
+**Pi:** closing the browser does not stop playback. If rotation is left running, it resumes after reboot without a console or desktop login. **Stop** saves the stopped state.
 
-48-frame clips have played correctly on the tested sign. The applications accept up to 113 frames based on the encoder's payload size; that is not a verified controller capacity. A 64-frame diagnostic did not play correctly. Check the physical display after uploading.
+## Compatibility
 
-The on-sign 0–100% transfer can take around 30 seconds in the tested setup. This project does not eliminate that delay. A sender's success message alone does not prove correct panel playback.
+The tested sign is a GOTUS CoolLED1248-app-compatible model advertising as `CoolLEDX`, with a **96 × 16** canvas. Other sizes, controllers and firmware are unverified. This is not a HUB75 panel driver.
 
-Both players use individual uploads and playlist rotation. Experimental combined-reel code is retained internally in the Windows source but is not exposed in the interface because it produced unacceptable missing frames in the personal setup.
+GIFs are converted to eight primary RGB colors and can be scaled, padded or stretched. Lower speed values play faster. Short animations work best: 48-frame clips played correctly on the tested sign, while a 64-frame diagnostic did not. The application's higher frame limit is not a guarantee of panel support.
 
-## Setup
+An upload can take around 30 seconds on the tested setup. The host must stay running to rotate the playlist.
 
-See [the setup instructions](docs/SETUP.md). Windows users can run `windows/Install_CoolLED.cmd` from the full source checkout. On Linux, run `python3 setup_player.py` as your normal account. The installer lets you select a display or provide its address and includes the RGB test animation. It does not upload an animation during setup.
+The Pi controls listen on port 8080 without a login and are intended for a trusted home network. Do not expose that port to the internet.
 
-Both applications use [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver) at revision `abf781b671b7a89571711127be0094b308e7f722`, with its GATT write set to `response=False` for the tested characteristic. Setup obtains that driver separately. Driver source and Python runtimes are not bundled in this repository.
+See [validation](docs/VALIDATION.md) for tested behavior and remaining coverage.
 
-The Pi web page is intended for a trusted home network. It listens on port 8080 without a login. Do not expose it to the internet or forward its port.
-
-## Tests
-
-On Linux, in an environment with the Pi requirements installed:
+## Development tests
 
 ```bash
+python3 -m unittest discover -s tests -v
 python3 -m unittest discover -s pi/tests -v
+python3 -m unittest discover -s windows/tests -v
 ```
 
-Installer checks run with `python3 -m unittest discover -s tests -v`. Windows configuration checks run with `python -m unittest discover -s windows/tests -v` in an environment with Tkinter and Pillow. See [validation notes](docs/VALIDATION.md) for the distinction between automated checks and physical testing.
+Install the relevant requirements first. Windows tests need Tkinter and Pillow; the GUI test also needs a graphical display.
 
-## Attribution, licensing and artwork
+## Credits and license
 
-See [ATTRIBUTION.md](ATTRIBUTION.md) for credits to Greg Tatham / UpDryTwist, CrimsonClyde's earlier protocol work and the runtime libraries. Original third-party notices are retained under [LICENSES/](LICENSES/), with sources and checksums in [LICENSE_SOURCES.json](LICENSE_SOURCES.json).
+Built on [UpDryTwist/coolledx-driver](https://github.com/UpDryTwist/coolledx-driver), which credits CrimsonClyde's earlier protocol work. See [ATTRIBUTION.md](ATTRIBUTION.md) for credits and third-party notices.
 
-The original player code, project documentation and RGB test animation are **open source under the [MIT License](LICENSE)**. See [NOTICE](NOTICE) for the project copyright notice. Commercial use, modification and redistribution are permitted, provided the copyright and license notices are retained as required by the license.
+Original player code, documentation and the RGB test animation are released under the [MIT License](LICENSE). Third-party components retain their own licenses.
 
-Third-party components retain their original licenses. This project license does not replace those terms or resolve the earlier-source provenance question recorded in ATTRIBUTION.md. Windows binary notice collection also remains a release preparation item.
+Game-themed animation files from the personal setup are not bundled. The photos and video show a personal arcade cabinet; no game publisher or hardware manufacturer endorses this project.
 
-This import includes an RGB test GIF. Game-themed animations from the personal setup are not included. Software credits do not grant rights to game artwork or imply manufacturer endorsement.
-
-The player is independent of RetroPie and does not automatically change animations when a game is selected.
-
-## Before a public release
-
-- Resolve the recorded upstream provenance question before bundling or redistributing derived driver code.
-- Test fresh installations, Pi reboot and display power recovery on physical hardware.
-- Collect exact runtime notices if distributing executables or bundled environments.
-- Add screenshots after the release interface is settled.
+The player works independently of RetroPie and does not automatically change animations when a game is selected.
