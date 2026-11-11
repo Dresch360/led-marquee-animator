@@ -4,6 +4,12 @@ Play animated GIFs on a compatible Bluetooth LED marquee using a Windows PC or a
 
 **Status: private release preparation.** Source installers for Windows and Linux now create the environment, obtain the pinned driver and save the user's display address. Automated setup checks pass, but fresh installations and Bluetooth playback still need verification on real hardware. The current canvas is fixed at 96 × 16 pixels.
 
+## Demo
+
+[Watch the marquee demo](CoolLED_Marquee_Demo.mp4)
+
+A short clip of the LED marquee in the personal arcade cabinet.
+
 ## Why I built this
 
 I'm a novice programmer who just wanted to upload my own animations to an LED matrix. That turned out to be harder than expected. I spent several months working through the app's restrictions and Bluetooth communication issues. This player grew out of that effort to make custom animations easier to upload, organize and rotate.
@@ -86,4 +92,4 @@ The player is independent of RetroPie and does not automatically change animatio
 - Remove the unsuccessful Windows combined-reel option from the release interface.
 - Test fresh installations, Pi reboot and display power recovery on physical hardware.
 - Collect exact runtime notices if distributing executables or bundled environments.
-- Add a short demo video and screenshots after the release interface is settled.
+- Add screenshots after the release interface is settled.
